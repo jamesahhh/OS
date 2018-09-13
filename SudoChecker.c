@@ -6,15 +6,19 @@
 #define false 0 //zero is false
 
 /*
-Program takes an input file of foramt specified in the assignment. It will create one parent thread which spawns
+Program takes an valid input file of foramt specified in the assignment. It will create one parent thread which spawns
 27 other worker threads to check the requirements for Sudoku Vailidity.
 */
 
+const char take[2] = "\\t";
+char line[50], *ptr = NULL;
+int i, j = 0;
 int sudoku[max][max];
 int columnsChecked[max];
 int rowsChecked[max];
 int subsChecked[max];
 
+typedef int boolean;
 typedef struct elements
 {
     int topRow;
@@ -25,37 +29,44 @@ typedef struct elements
 
 int main(int argc, char **argv[])
 {
-    char *file_name;
-    int c;
-    FILE *fp;
+    char *file_name = argv[1];
+    open_read(file_name);
+    printSudo();
+};
 
-    file_name = argv[1];
-    fp = fopen(file_name, "r");
-    if (fp == NULL)
+void open_read(const char* file_name){
+    char c;
+    int current;
+    FILE *fp = fopen(file_name, "r");
+    if (!fp)
     {
         perror("Error while opening the file: Does not exist.");
-        return -1;
-    }
-    while (!feof(fp))
-    {
-        for (int i = 0; i < 9; i++)
-        {
-            for (int j = 0; j < 9; j++)
-            {
-                sudoku[i][j] = fgetc(fp);
-            };
-        };
+        exit(-1);
     };
-
-    for (int i = 0; i < 9; i++)
-        {
-            for (int j = 0; j < 9; j++)
-            {
-                printf(sudoku[i][j]);
-            };
-            printf("\n");
+    while(EOF != fscanf(stdin, "%s", line)){
+        printf("\n Read Line: %s\n", line);
+        ptr = strtok(line, take);
+        sudoku[i][j++] = ptr;
+        //printf(sudoku[i][j-1]);
+        while(NULL != (ptr = strtok(NULL, take))){
+            sudoku[i][j] = ptr;
+            //printf("inside");
+            //printf(sudoku[i][j]);
+            j++;
         };
-    
+        j = 0;
+        i++;
+    };
+    fclose(fp);
+};
+
+void printSudo(){
+    for(int i = 0; i < 9; i++){
+        for(int j = 0; j<9; j++){
+            printf(sudoku[i][j]);
+        };
+        printf("\n");
+    };
 };
 
 /* get thread id for tid array
