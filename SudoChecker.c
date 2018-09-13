@@ -29,9 +29,11 @@ typedef struct elements
 
 int main(int argc, char **argv[])
 {
-    char *file_name = argv[1];
-    open_read(file_name);
-    printSudo();
+    if(argc > 1){
+        char *file_name = argv[1];
+        open_read(file_name);
+        printSudo();
+    };
 };
 
 void open_read(const char* file_name){
@@ -43,7 +45,7 @@ void open_read(const char* file_name){
         perror("Error while opening the file: Does not exist.");
         exit(-1);
     };
-    while(EOF != fscanf(stdin, "%s", line)){
+    while(EOF != fscanf(fp, "%s", line)){
         printf("\n Read Line: %s\n", line);
         ptr = strtok(line, take);
         sudoku[i][j++] = ptr;
