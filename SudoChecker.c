@@ -3,8 +3,6 @@
 #include <string.h>
 
 #define max 9   //number of slots in a row/column
-#define true 1  //non-zero is true
-#define false 0 //zero is false
 
 /*
 Program takes an valid input file of foramt specified in the assignment. It will create one parent thread which spawns
@@ -12,14 +10,14 @@ Program takes an valid input file of foramt specified in the assignment. It will
 */
 
 const char take[4] = " \\t";
-char line[50], *ptr = NULL;
 int i, j = 0;
+char line[50], *ptr = NULL;
 int sudoku[max][max];
 int columnsChecked[max];
 int rowsChecked[max];
 int subsChecked[max];
 
-typedef int boolean;
+typedef enum { false, true}  bool;
 typedef struct elements
 {
     int topRow;
@@ -63,6 +61,37 @@ void printSudo(){
             printf("%d", sudoku[i][j]);
         }
         printf("\n");
+    }
+}
+
+void *checkColumn( void *element){
+    elements *data = (elements *) element;
+    int start = data -> topRow;
+    int end = data -> bottomRow;
+    int col = data ->leftColumn;
+    for (int i = start; start <= end; start++){
+        int cell = sudoku[i][col];
+    }
+}
+
+void *checkRow( void *element){
+    elements *data = (elements *) element;
+    int start = data -> leftColumn;
+    int end = data -> rightColumn;
+    int row = data ->topRow;
+    for (int i = start; start <= end; start++){
+        int cell = sudoku[row][start];
+    }
+}
+
+void *checkGrids ( void *element){
+    elements *data = (elements *) element;
+    int start = data -> leftColumn;
+    int end = data -> rightColumn;
+    int top = data ->topRow;
+    int bot = data -> bottomRow;
+    for (int i = start; start <= end; start++){
+        int cell = sudoku[i][col];
     }
 }
 
