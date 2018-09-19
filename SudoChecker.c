@@ -26,7 +26,7 @@ int sudoku[max][max];
 bool columnsChecked[max];
 bool rowsChecked[max];
 bool subsChecked[max];
-bool flags[3];
+bool flags[3] = {true};
 
 void open_read(char *file_name){
     char c;
@@ -210,7 +210,6 @@ int main(int argc, char *argv[])
         char *validity = "";
         if(columnsChecked[f] == true){
             validity = "valid";
-            flags[0] = true;
         }else {
             validity = "invalid";
             flags[0] = false;
@@ -223,7 +222,6 @@ int main(int argc, char *argv[])
         char *validity = "";
         if(columnsChecked[f] == true){
             validity = "valid";
-            flags[1] = true;
         }else {
             validity = "invalid";
             flags[1] = false;
@@ -235,7 +233,6 @@ int main(int argc, char *argv[])
         char *validity = "";
         if(columnsChecked[f] == true){
             validity = "valid";
-            flags[2] = true;
         }else {
             validity = "invalid";
             flags[2] = false;
@@ -243,9 +240,9 @@ int main(int argc, char *argv[])
         printf("\nRow: 0x%lx %s", tid_row[f], validity);
     }
 
-    if(flags[0] == flags[1] == flags[2]){
-        printf("\nThis Sudokue Puzzle is VALID!");
-    }else printf("\nThis Sudoku Puzzle is INVALID!");
+    if(flags[0] == false && flags[1] == false && flags[2] == false){
+        printf("\nThis Sudokue Puzzle is INVALID!");
+    }else printf("\nThis Sudoku Puzzle is VALID!");
 
 
 }
