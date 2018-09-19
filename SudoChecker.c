@@ -26,6 +26,7 @@ int sudoku[max][max];
 bool columnsChecked[max];
 bool rowsChecked[max];
 bool subsChecked[max];
+bool flags[3];
 
 void open_read(char *file_name){
     char c;
@@ -54,23 +55,24 @@ void open_read(char *file_name){
 }
 
 /**
- * 
  * Print Sudoku to make sure file read in correctly
  * Not used in final submission
  * */
-void printSudo(){   
+void printSudo(int input[max][max]){
+    printf("\nSUDOKU INPUT:");
     int i;
     for(i = 0; i < 9; i++){
+        printf("\n");
         int j;
         for(j = 0; j<9; j++){
-            printf("%d", sudoku[i][j]);
+            printf("%d  ", input[i][j]);
         }
         printf("\n");
     }
 }
 
 void *checkColumn( void *element){
-    elements *data = (elements *) element;
+    elements* data = (elements *) element;
     int top = data -> topRow;
     int bottom = data -> bottomRow;
     int left = data -> leftColumn;
@@ -155,7 +157,7 @@ int main(int argc, char *argv[])
         file_name = argv[1];
     } else { file_name = "SudokuPuzzle.txt"; }
     open_read(file_name);
-    //printSudo();
+    printSudo(sudoku);
 
     pthread_t tid_row[max], tid_col[max], tid_subgrid[max], dummy[max];
     
@@ -208,7 +210,11 @@ int main(int argc, char *argv[])
         char *validity = "";
         if(columnsChecked[f] == true){
             validity = "valid";
-        }else validity = "invalid";
+            flags[0] = true;
+        }else {
+            validity = "invalid";
+            flags[0] = false;
+        }
         printf("\nSubgrid: 0x%lx %s", tid_subgrid[f], validity);
     }
 
@@ -217,7 +223,11 @@ int main(int argc, char *argv[])
         char *validity = "";
         if(columnsChecked[f] == true){
             validity = "valid";
-        }else validity = "invalid";
+            flags[1] = true;
+        }else {
+            validity = "invalid";
+            flags[1] = false;
+        }
         printf("\nColumn: 0x%lx %s", tid_col[f], validity);
     }
 
@@ -225,9 +235,19 @@ int main(int argc, char *argv[])
         char *validity = "";
         if(columnsChecked[f] == true){
             validity = "valid";
-        }else validity = "invalid";
+            flags[2] = true;
+        }else {
+            validity = "invalid";
+            flags[2] = false;
+        }
         printf("\nRow: 0x%lx %s", tid_row[f], validity);
     }
+
+    if(flags[0] == flags[1] == flags[2]){
+        printf("\nThis Sudokue Puzzle is VALID!");
+    }else printf("\nThis Sudoku Puzzle is INVALID!");
+
+
 }
 
 
